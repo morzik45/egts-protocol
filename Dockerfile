@@ -34,10 +34,8 @@ RUN go mod verify
 COPY . .
 
 # Build the binary
-RUN go build -buildmode=plugin ./libs/store/nats/nats.go -o /go/bin/nats.so
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
-    -ldflags='-w -s -extldflags "-static"' -a \
-    -o /go/bin/receiver ./cli/receiver
+RUN go build -buildmode=plugin -o /go/bin/nats.so ./libs/store/nats/nats.go
+RUN go build -o /go/bin/receiver ./cli/receiver
 
 ############################
 # STEP 2 build a small image
