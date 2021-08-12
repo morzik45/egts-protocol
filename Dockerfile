@@ -3,8 +3,8 @@ WORKDIR /go/src/app
 COPY . .
 # Static build required so that we can safely copy the binary over.
 # `-tags timetzdata` embeds zone info from the "time/tzdata" package.
-RUN CGO_ENABLED=0 go build -buildmode=plugin -o bin/nats.so ./libs/store/nats/nats.go
-RUN CGO_ENABLED=0 go install ./cli/receiver -ldflags '-extldflags "-static"' -tags timetzdata
+RUN CGO_ENABLED=0 go install -buildmode=plugin -o bin/nats.so ./libs/store/nats/nats.go
+RUN CGO_ENABLED=0 go install -o bin/receiver ./cli/receiver -ldflags '-extldflags "-static"' -tags timetzdata
 
 FROM scratch
 # the test program:
