@@ -36,6 +36,9 @@ COPY . .
 # Build the binary
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
     -ldflags='-w -s -extldflags "-static"' -a \
+    -o /go/bin/nats.so ./libs/store/nats/nats.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+    -ldflags='-w -s -extldflags "-static"' -a \
     -o /go/bin/receiver ./cli/receiver
 
 ############################
@@ -50,6 +53,7 @@ COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group
 
 # Copy our static executable
+COPY --from=builder /go/bin/nats.so /go/bin/nats.so
 COPY --from=builder /go/bin/receiver /go/bin/receiver
 COPY config.toml /config.toml
 
