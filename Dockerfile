@@ -57,4 +57,4 @@ COPY config.toml /config.toml
 USER appuser:appuser
 
 # Run the hello binary.
-ENTRYPOINT ["/go/bin/receiver /config.toml"]
+ENTRYPOINT ["/go/bin/receiver", "/config.toml"]
