@@ -73,6 +73,10 @@ func (rds *RecordDataSet) Decode(recDS []byte) error {
 			rd.SubrecordData = &SrAbsAnSensData{}
 		case SrDispatcherIdentityType:
 			rd.SubrecordData = &SrDispatcherIdentity{}
+		case SrCommandDataType:
+			*rds = append(*rds, rd)
+			return err
+
 		default:
 			return fmt.Errorf("Не известный тип подзаписи: %d. Длина: %d. Содержимое: %X", rd.SubrecordType, rd.SubrecordLength, subRecordBytes)
 		}

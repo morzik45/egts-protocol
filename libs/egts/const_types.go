@@ -68,3 +68,6 @@ const TeledataService = 2
 
 //SrDispatcherIdentityType код типа подзаписи EGTS_SR_DISPATCHER_IDENTITY
 const SrDispatcherIdentityType = 5
+
+//SrCommandDataType код типа подзаписи EGTS_SR_COMMAND_DATA
+const SrCommandDataType = 29
