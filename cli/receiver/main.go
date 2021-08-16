@@ -3,7 +3,6 @@ package main
 import (
 	"net"
 	"os"
-	"plugin"
 
 	"github.com/labstack/gommon/log"
 )
@@ -29,21 +28,7 @@ func main() {
 	}
 	logger.SetLevel(config.getLogLevel())
 
-	if config.Store != nil {
-		plug, err := plugin.Open(config.Store["plugin"])
-		if err != nil {
-			logger.Fatalf("Не удалость загрузить плагин хранилища: %v", err)
-		}
-
-		connector, err := plug.Lookup("Connector")
-		if err != nil {
-			logger.Fatalf("Не удалось загрузить коннектор: %v", err)
-		}
-
-		store = connector.(Connector)
-	} else {
-		store = defaultConnector{}
-	}
+	store = &NatsConnector{}
 
 	if err := store.Init(config.Store); err != nil {
 		logger.Fatal(err)
