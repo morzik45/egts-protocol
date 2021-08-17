@@ -1,0 +1,75 @@
+ARG  BUILDER_IMAGE=golang:alpine
+############################
+# STEP 1 build executable binary
+############################
+FROM ${BUILDER_IMAGE} as builder
+
+# Install oracle instant client
+ENV LD_LIBRARY_PATH=/lib
+
+RUN wget https://download.oracle.com/otn/linux/instantclient/121020/instantclient-basic-linux.x64-12.1.0.2.0.zip && \
+    unzip instantclient-basic-linux.x64-19.3.0.0.0dbru.zip && \
+    cp -r instantclient_19_3/* /lib && \
+    rm -rf instantclient-basic-linux.x64-19.3.0.0.0dbru.zip && \
+    apk add libaio && \
+    apk add libaio libnsl libc6-compat && \
+    cd /lib && \
+    # Linking ld-linux-x86-64.so.2 to the lib/ location (Update accordingly)
+    ln -s /lib64/* /lib && \
+    ln -s libnsl.so.2 /usr/lib/libnsl.so.1 && \
+    ln -s libc.so /usr/lib/libresolv.so.2 
+
+# Install git + SSL ca certificates.
+# Git is required for fetching the dependencies.
+# Ca-certificates is required to call HTTPS endpoints.
+RUN apk update && apk add --no-cache git ca-certificates tzdata && update-ca-certificates 
+
+# Create appuser
+ENV USER=appuser
+ENV UID=10001
+
+# See https://stackoverflow.com/a/55757473/12429735
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/nonexistent" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "${UID}" \
+    "${USER}"
+WORKDIR $GOPATH/src/mypackage/myapp/
+
+# use modules
+COPY go.mod .
+
+ENV GO111MODULE=on
+RUN go mod download
+RUN go mod verify
+
+COPY . .
+
+# Build the binary
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+    -ldflags='-w -s -extldflags "-static"' -a \
+    -o /go/bin/saver ./cli/saver
+
+############################
+# STEP 2 build a small image
+############################
+FROM scratch
+
+# Import from builder.
+COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /etc/passwd /etc/passwd
+COPY --from=builder /etc/group /etc/group
+
+# Copy our static executable
+COPY --from=builder /go/bin/saver /go/bin/saver
+COPY config.toml /config.toml
+
+# Use an unprivileged user.
+USER appuser:appuser
+
+# Run the hello binary.
+ENTRYPOINT ["/go/bin/saver", "/config.toml"]

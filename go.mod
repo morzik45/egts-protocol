@@ -4,10 +4,12 @@ go 1.12
 
 require (
 	github.com/BurntSushi/toml v0.3.1
+	github.com/godror/godror v0.25.3
 	github.com/golang/protobuf v1.4.2
+	github.com/jmoiron/sqlx v1.3.4
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/labstack/gommon v0.2.8
-	github.com/lib/pq v1.1.1
+	github.com/lib/pq v1.2.0
 	github.com/mattn/go-colorable v0.1.1 // indirect
 	github.com/mattn/go-isatty v0.0.7 // indirect
 	github.com/nats-io/nats-server/v2 v2.2.0 // indirect

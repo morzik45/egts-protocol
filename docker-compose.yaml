@@ -1,0 +1,41 @@
+version: "3.5"
+
+networks:
+  receiver:
+    name: receiver
+
+services:
+  nats:
+    image: nats
+    restart: always
+    ports:
+      - "8222:8222"
+    networks: ["receiver"]
+  nats-1:
+    image: nats
+    restart: on-failure
+    command: "--cluster nats://0.0.0.0:6222 --routes=nats://nats:6222"
+    networks: ["receiver"]
+    depends_on: ["nats"]
+  nats-2:
+    image: nats
+    restart: on-failure
+    command: "--cluster nats://0.0.0.0:6222 --routes=nats://nats:6222"
+    networks: ["receiver"]
+    depends_on: ["nats"]
+  receiver:
+    build:
+      context .
+      dockerfile: ./docker/Dockerfile.receiver
+    restart: always
+    ports:
+      - "9001:9001"
+    networks: ["receiver"]
+    depends_on: ["nats"]
+  saver:
+    build:
+      context .
+      dockerfile: ./docker/Dockerfile.saver
+    restart: always
+    networks: ["receiver"]
+    depends_on: ["nats"]

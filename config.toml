@@ -1,0 +1,21 @@
+[srv]
+host = "0.0.0.0"
+port = "9001"
+con_live_sec = 40
+
+[log]
+level = "DEBUG"
+
+[store]
+plugin = "nats.so"
+servers = "nats://nats:4222, nats://nats-1:4222, nats://nats-2:4222"
+topic = "egts"
+user = "guest"
+password = "guest"
+
+[oracle]
+host = "192.168.1.5"
+port = 1521
+service = "orcl"
+user = "dispatcher"
+password = "dispatcher"
