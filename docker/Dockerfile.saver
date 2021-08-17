@@ -7,10 +7,10 @@ FROM ${BUILDER_IMAGE} as builder
 # Install oracle instant client
 ENV LD_LIBRARY_PATH=/lib
 
-RUN wget https://download.oracle.com/otn/linux/instantclient/121020/instantclient-basic-linux.x64-12.1.0.2.0.zip && \
-    unzip instantclient-basic-linux.x64-19.3.0.0.0dbru.zip && \
-    cp -r instantclient_19_3/* /lib && \
-    rm -rf instantclient-basic-linux.x64-19.3.0.0.0dbru.zip && \
+RUN wget https://download.oracle.com/otn_sofware/linux/instantclient/185000/instantclient-basic-linux.x64-18.5.0.0dbru.zip && \
+    unzip instantclient-basic-linux.x64-18.5.0.0dbru.zip && \
+    cp -r instantclient_18_5/* /lib && \
+    rm -rf instantclient-basic-linux.x64-18.5.0.0dbru.zip && \
     apk add libaio && \
     apk add libaio libnsl libc6-compat && \
     cd /lib && \
