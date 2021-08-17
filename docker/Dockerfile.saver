@@ -50,7 +50,7 @@ COPY . .
 
 # Build the binary
 RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build \
-    -o /go/bin/saver ./cli/saver
+    -o /go/bin/saver -a -v ./cli/saver
 
 ############################
 # STEP 2 build a small image
