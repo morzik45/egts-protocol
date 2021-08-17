@@ -19,7 +19,7 @@ func (c *OracleConnector) Init(cfg map[string]string) error {
 		return fmt.Errorf("Не корректная ссылка на конфигурацию")
 	}
 	c.config = cfg
-	c.db, err = sqlx.Open("godror", fmt.Sprintf(`user="%s" password="%s" connectString="%s:%s/%s"`,
+	c.db, err = sqlx.Open("godror", fmt.Sprintf(`%s/%s@%s:%s/%s?PROTOCAL=TCP"`,
 		c.config["user"],
 		c.config["password"],
 		c.config["host"],
