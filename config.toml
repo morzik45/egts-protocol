@@ -15,7 +15,7 @@ password = "guest"
 
 [oracle]
 host = "192.168.1.5"
-port = 1521
+port = "1521"
 service = "orcl"
 user = "dispatcher"
 password = "dispatcher"
