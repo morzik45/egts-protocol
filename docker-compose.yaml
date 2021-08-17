@@ -25,7 +25,7 @@ services:
     depends_on: ["nats"]
   receiver:
     build:
-      context .
+      context: .
       dockerfile: ./docker/Dockerfile.receiver
     restart: always
     ports:
@@ -34,7 +34,7 @@ services:
     depends_on: ["nats"]
   saver:
     build:
-      context .
+      context: .
       dockerfile: ./docker/Dockerfile.saver
     restart: always
     networks: ["receiver"]
