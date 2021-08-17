@@ -55,7 +55,8 @@ RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build \
 ############################
 # STEP 2 build a small image
 ############################
-FROM scratch
+# FROM scratch
+FROM alpine:latest
 
 # Import from builder.
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
