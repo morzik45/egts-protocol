@@ -30,8 +30,8 @@ services:
     restart: always
     ports:
       - "9001:9001"
-    environments:
-      - TZ=Asia/Yekaterinburg
+    environment:
+      TZ: Asia/Yekaterinburg
     networks: ["receiver"]
     depends_on: ["nats"]
   saver:
@@ -39,7 +39,7 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile.saver
     restart: always
-    environments:
-      - TZ=Asia/Yekaterinburg
+    environment:
+      TZ: Asia/Yekaterinburg
     networks: ["receiver"]
     depends_on: ["nats"]
