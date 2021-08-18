@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	_ "github.com/godror/godror"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/mattn/go-oci8"
 )
 
 type OracleConnector struct {
@@ -19,7 +19,7 @@ func (c *OracleConnector) Init(cfg map[string]string) error {
 		return fmt.Errorf("Не корректная ссылка на конфигурацию")
 	}
 	c.config = cfg
-	c.db, err = sqlx.Open("godror", fmt.Sprintf(`%s/%s@%s:%s/%s?PROTOCAL=TCP`,
+	c.db, err = sqlx.Open("oci8", fmt.Sprintf(`%s/%s@%s:%s/%s?PROTOCAL=TCP`,
 		c.config["user"],
 		c.config["password"],
 		c.config["host"],
