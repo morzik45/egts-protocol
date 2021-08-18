@@ -53,6 +53,9 @@ ENV GO111MODULE=on
 RUN go mod download
 RUN go mod verify
 
+#temporary for test
+RUN apk add --no-cache pkgconfig 
+
 COPY . .
 
 # Build the binary
