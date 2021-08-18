@@ -1,29 +1,6 @@
-FROM golang:alpine
+FROM golang
 
-# ENV LD_LIBRARY_PATH=/lib
-
-# RUN wget https://download.oracle.com/otn_software/linux/instantclient/185000/instantclient-basic-linux.x64-18.5.0.0.0dbru.zip && \
-#     unzip instantclient-basic-linux.x64-18.5.0.0.0dbru.zip && \
-#     cp -r instantclient_18_5/* /lib && \
-#     rm -rf instantclient-basic-linux.x64-18.5.0.0.0dbru.zip && \
-#     apk add libaio && \
-#     apk add libaio libnsl libc6-compat && \
-#     cd /lib && \
-#     # Linking ld-linux-x86-64.so.2 to the lib/ location (Update accordingly)
-#     ln -s /lib64/* /lib && \
-#     ln -s libnsl.so.2 /usr/lib/libnsl.so.1 && \
-#     ln -s libc.so /usr/lib/libresolv.so.2 
-
-# Install git + SSL ca certificates.
-# Git is required for fetching the dependencies.
-# Ca-certificates is required to call HTTPS endpoints.
-RUN apk update && apk add --no-cache git ca-certificates tzdata build-base pkgconfig && \
-    update-ca-certificates && \
-    apk add libaio libnsl libc6-compat && \
-    cd /lib && \
-    ln -s /lib64/* /lib && \
-    ln -s libnsl.so.2 /usr/lib/libnsl.so.1 && \
-    ln -s libc.so /usr/lib/libresolv.so.2 
+RUN apt-get update && apt-get install -y pkg-config libaio1 unzip
 
 # Install oracle
 ENV CLIENT_FILENAME instantclient_12_1.zip
@@ -31,7 +8,6 @@ COPY /oracle/${CLIENT_FILENAME} .
 COPY /oracle/oci8.pc /usr/lib/pkgconfig/oci8.pc
 ENV LD_LIBRARY_PATH /usr/lib:/usr/local/lib:/usr/instantclient_12_1
 
-# to build the application with mattn/go-oci8, it is necessary to extract all files, including the SDK.
 RUN unzip ${CLIENT_FILENAME} -d /usr &&  \
     ln -s /usr/instantclient_12_1/libclntsh.so.12.1 /usr/instantclient_12_1/libclntsh.so && \
     ln -s /usr/instantclient_12_1/libclntshcore.so.12.1 /usr/instantclient_12_1/libclntshcore.so && \
@@ -62,7 +38,8 @@ RUN go mod verify
 COPY . .
 
 # Build the binary
-RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build \
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+    -ldflags='-w -s -extldflags "-static"' -a \
     -o /go/bin/saver ./cli/saver
 
 COPY config.toml /config.toml
