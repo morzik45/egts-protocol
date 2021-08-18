@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"io"
 	"net"
+	"strings"
 	"time"
 
 	"github.com/kuznetsovin/egts-protocol/libs/egts"
@@ -107,7 +108,7 @@ func handleRecvPkg(conn net.Conn, store Connector) {
 			for _, rec := range *pkg.ServicesFrameData.(*egts.ServiceDataSet) {
 				exportPacket := egtsParsePacket{
 					PacketID: uint32(pkg.PacketIdentifier),
-					ClientIP: conn.RemoteAddr().String(),
+					ClientIP: strings.Split(conn.RemoteAddr().String(), ";")[0],
 				}
 
 				isPkgSave = false
