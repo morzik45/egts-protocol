@@ -107,6 +107,7 @@ func handleRecvPkg(conn net.Conn, store Connector) {
 			for _, rec := range *pkg.ServicesFrameData.(*egts.ServiceDataSet) {
 				exportPacket := egtsParsePacket{
 					PacketID: uint32(pkg.PacketIdentifier),
+					ClientIP: conn.RemoteAddr().String(),
 				}
 
 				isPkgSave = false

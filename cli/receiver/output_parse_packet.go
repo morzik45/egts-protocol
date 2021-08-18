@@ -3,11 +3,12 @@ package main
 import (
 	"encoding/json"
 
-	"github.com/satori/go.uuid"
+	uuid "github.com/satori/go.uuid"
 )
 
 type egtsParsePacket struct {
 	Client              uint32         `json:"client"`
+	ClientIP            string         `json:"client_ip"`
 	PacketID            uint32         `json:"packet_id"`
 	NavigationTimestamp int64          `json:"navigation_unix_time"`
 	ReceivedTimestamp   int64          `json:"received_unix_time"`

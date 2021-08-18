@@ -45,6 +45,7 @@ func main() {
 func runServer(store Connector, db *OracleConnector) {
 	recvCh := make(chan *egtsParsePacket)
 	store.Bind(recvCh)
+	logger.Info("Воркер сохранения отметок в базу данных запущен.")
 
 	for {
 		point := <-recvCh

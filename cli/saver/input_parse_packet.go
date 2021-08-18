@@ -28,6 +28,7 @@ type dbGpsPoint struct {
 
 type egtsParsePacket struct {
 	Client              uint32         `json:"client"`
+	ClientIP            string         `json:"client_ip"`
 	PacketID            uint32         `json:"packet_id"`
 	NavigationTimestamp int64          `json:"navigation_unix_time"`
 	ReceivedTimestamp   int64          `json:"received_unix_time"`
@@ -55,9 +56,9 @@ func (eep *egtsParsePacket) ToDBGpsPoint() (*dbGpsPoint, error) {
 		Ntime:      hour*60*60 + min*60 + sec,
 		Ctime:      ndt.Format("15:04:05"),
 		Cid:        strconv.FormatUint(uint64(eep.Client), 10),
-		Cip:        "", // FIXME
+		Cip:        eep.ClientIP,
 		Clatitude:  fmt.Sprintf("%2.6f", eep.Latitude),
-		Cns:        "E",
+		Cns:        "N",
 		Clongitude: fmt.Sprintf("%2.6f", eep.Longitude),
 		Cew:        "E",
 		Ccurse:     strconv.Itoa(int(eep.Course)),
