@@ -9,7 +9,7 @@ import (
 
 type OracleConnector struct {
 	db     *sqlx.DB
-	stmt   *sqlx.Stmt
+	stmt   *sqlx.NamedStmt
 	config map[string]string
 }
 
@@ -30,7 +30,7 @@ func (c *OracleConnector) Init(cfg map[string]string) error {
 	if err != nil {
 		return err
 	}
-	c.stmt, err = c.db.Preparex(`INSERT INTO DISPATCHER.TGPSDATA (DSYSDATA, DDATA, NTIME, CTIME, CID,
+	c.stmt, err = c.db.PrepareNamed(`INSERT INTO DISPATCHER.TGPSDATA (DSYSDATA, DDATA, NTIME, CTIME, CID,
 		CIP, CLATITUDE, CNS, CLONGTITUDE, CEW, CCURSE, CSPEED, CSATEL) VALUES (:DSYSDATA, :DDATA, :NTIME,
 		:CTIME, :CID, :CIP, :CLATITUDE, :CNS, :CLONGTITUDE, :CEW, :CCURSE, :CSPEED, :CSATEL)`)
 	if err != nil {
@@ -41,7 +41,8 @@ func (c *OracleConnector) Init(cfg map[string]string) error {
 
 func (c *OracleConnector) Save(packet *egtsParsePacket) error {
 	p, _ := packet.ToDBGpsPoint()
-	_, err := c.stmt.Exec(p.Dsysdata, p.Ddata, p.Ntime, p.Ctime, p.Cid, p.Cip, p.Clatitude, p.Cns, p.Clongitude, p.Cew, p.Ccurse, p.Cspeed, p.Csatel)
+	// _, err := c.stmt.Exec(p.Dsysdata, p.Ddata, p.Ntime, p.Ctime, p.Cid, p.Cip, p.Clatitude, p.Cns, p.Clongitude, p.Cew, p.Ccurse, p.Cspeed, p.Csatel)
+	_, err := c.stmt.Exec(&p)
 	if err != nil {
 		logger.Errorf("Ошибка при сохранении в базу данных: %v", err)
 	}
