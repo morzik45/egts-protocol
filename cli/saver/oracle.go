@@ -32,7 +32,7 @@ func (c *OracleConnector) Init(cfg map[string]string) error {
 	}
 	c.stmt, err = c.db.Preparex(`INSERT INTO DISPATCHER.TGPSDATA (DSYSDATA, DDATA, NTIME, CTIME, CID,
 		CIP, CLATITUDE, CNS, CLONGTITUDE, CEW, CCURSE, CSPEED, CSATEL) VALUES (:DSYSDATA, :DDATA, :NTIME,
-		:CTIME, :CID, :CIP, :CLATITUDE, :CNS, :CLONGTITUDE, :CEW, :CCURSE, :CSPEED, :CSATEL);`)
+		:CTIME, :CID, :CIP, :CLATITUDE, :CNS, :CLONGTITUDE, :CEW, :CCURSE, :CSPEED, :CSATEL)`)
 	if err != nil {
 		return err
 	}
