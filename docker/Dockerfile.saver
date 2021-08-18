@@ -17,7 +17,13 @@ FROM golang:alpine
 # Install git + SSL ca certificates.
 # Git is required for fetching the dependencies.
 # Ca-certificates is required to call HTTPS endpoints.
-RUN apk update && apk add --no-cache git ca-certificates tzdata build-base && update-ca-certificates 
+RUN apk update && apk add --no-cache git ca-certificates tzdata build-base pkgconfig && \
+    update-ca-certificates && \
+    apk add libaio libnsl libc6-compat && \
+    cd /lib && \
+    ln -s /lib64/* /lib && \
+    ln -s libnsl.so.2 /usr/lib/libnsl.so.1 && \
+    ln -s libc.so /usr/lib/libresolv.so.2 
 
 # Install oracle
 ENV CLIENT_FILENAME instantclient_12_1.zip
@@ -52,9 +58,6 @@ COPY go.mod .
 ENV GO111MODULE=on
 RUN go mod download
 RUN go mod verify
-
-#temporary for test
-RUN apk add --no-cache pkgconfig 
 
 COPY . .
 
