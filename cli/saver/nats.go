@@ -53,7 +53,7 @@ func (c *NatsConnector) Init(cfg map[string]string) error {
 }
 
 func (c *NatsConnector) Bind(recvCh chan *egtsParsePacket) (*natsLib.Subscription, error) {
-	return c.econnection.BindRecvChan(c.config["topic"], recvCh)
+	return c.econnection.BindRecvQueueChan(c.config["topic"], "save_orcl", recvCh)
 }
 
 func (c *NatsConnector) Close() error {
