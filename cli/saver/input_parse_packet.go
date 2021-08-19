@@ -24,6 +24,7 @@ type dbGpsPoint struct {
 	Ccurse     string `db:"CCURSE"`
 	Cspeed     string `db:"CSPEED"`
 	Csatel     string `db:"CSATEL"`
+	Cdatavalid string `db:"CDATAVALID"`
 }
 
 type egtsParsePacket struct {
@@ -64,6 +65,7 @@ func (eep *egtsParsePacket) ToDBGpsPoint() (*dbGpsPoint, error) {
 		Ccurse:     strconv.Itoa(int(eep.Course)),
 		Cspeed:     strconv.Itoa(int(eep.Speed)),
 		Csatel:     fmt.Sprintf("%d", eep.Nsat),
+		Cdatavalid: "V",
 	}
 	return point, nil
 }
