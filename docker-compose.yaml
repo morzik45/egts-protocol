@@ -35,16 +35,16 @@ services:
       TZ: Asia/Yekaterinburg
     networks: ["receiver"]
     depends_on: ["nats"]
+  # saver:
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/Dockerfile.saver
+  #   restart: always
+  #   environment:
+  #     TZ: Asia/Yekaterinburg
+  #   networks: ["receiver"]
+  #   depends_on: ["nats"]
   saver:
-    build:
-      context: .
-      dockerfile: ./docker/Dockerfile.saver
-    restart: always
-    environment:
-      TZ: Asia/Yekaterinburg
-    networks: ["receiver"]
-    depends_on: ["nats"]
-  saver2:
     build:
       context: .
       dockerfile: ./docker/Dockerfile.saver2
