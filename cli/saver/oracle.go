@@ -32,8 +32,8 @@ func (c *OracleConnector) Init(cfg map[string]string) error {
 	}
 	logger.Infof("Соединение с базой %s установлено.", c.config["host"])
 	c.stmt, err = c.db.PrepareNamed(`INSERT INTO DISPATCHER.TGPSDATA (DSYSDATA, DDATA, NTIME, CTIME, CID,
-		CIP, CLATITUDE, CNS, CLONGTITUDE, CEW, CCURSE, CSPEED, CSATEL) VALUES (:DSYSDATA, :DDATA, :NTIME,
-		:CTIME, :CID, :CIP, :CLATITUDE, :CNS, :CLONGTITUDE, :CEW, :CCURSE, :CSPEED, :CSATEL)`)
+		CIP, CLATITUDE, CNS, CLONGTITUDE, CEW, CCURSE, CSPEED, CSATEL, CDATAVALID) VALUES (:DSYSDATA, :DDATA, :NTIME,
+		:CTIME, :CID, :CIP, :CLATITUDE, :CNS, :CLONGTITUDE, :CEW, :CCURSE, :CSPEED, :CSATEL, :CDATAVALID)`)
 	if err != nil {
 		return err
 	}
